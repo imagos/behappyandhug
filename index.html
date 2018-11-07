@@ -15,8 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="generator" content="Polymer Starter Kit">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>My App</title>
-    <meta name="description" content="My App description">
+    <title>Be happy</title>
+    <meta name="description" content="Be Happy">
 
     <!--
       The `<base>` tag below is present to support two advanced deployment options:
@@ -40,12 +40,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="My App">
+    <meta name="application-name" content="Be Happy">
 
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="My App">
+    <meta name="apple-mobile-web-app-title" content="Be Happy">
 
     <!-- Homescreen icons -->
     <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
@@ -74,20 +74,20 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       window.MyAppGlobals = { rootPath: '/' };
 
       // Load and register pre-caching Service Worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-          navigator.serviceWorker.register('service-worker.js', {
-            scope: MyAppGlobals.rootPath
-          });
-        });
-      }
+      // if ('serviceWorker' in navigator) {
+      //   window.addEventListener('load', function() {
+      //     navigator.serviceWorker.register('service-worker.js', {
+      //       scope: MyAppGlobals.rootPath
+      //     });
+      //   });
+      // }
     </script>
 
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
     <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
 
     <!-- Load your application shell -->
-    <script type="module" src="src/my-app.js"></script>
+    <script type="module" src="src/be-happy.js"></script>
 
     <!-- Add any global styles for body, document, etc. -->
     <style>
@@ -99,9 +99,29 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         background-color: #eeeeee;
       }
     </style>
+<!-- Firebase App is always required and must be first -->
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-app.js"></script>
+    
+    <!-- Add additional services that you want to use -->
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/charts/loader.js" type="text/javascript"></script>
+    <script>// Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyDKZ4bK-9vmjbTc25fWH_AR2iS_50f0okw",
+      authDomain: "behappyandhug.firebaseapp.com",
+      databaseURL: "https://behappyandhug.firebaseio.com",
+      projectId: "behappyandhug",
+      storageBucket: "behappyandhug.appspot.com",
+      messagingSenderId: "784946787344"
+    };
+    firebase.initializeApp(config,{timestampsInSnapshots: true});
+    var db = firebase.firestore();
+    </script>
   </head>
   <body>
-    <my-app></my-app>
+    <be-happy></be-happy>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
