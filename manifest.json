@@ -1,7 +1,7 @@
 {
-  "name": "My App",
-  "short_name": "My App",
-  "description": "My App description",
+  "name": "Be Happy",
+  "short_name": "Be Happy",
+  "description": "Be happy and hug",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",

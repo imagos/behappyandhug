@@ -1,10 +1,10 @@
 {
-  "name": "polymer-starter-kit",
+  "name": "BeHappy",
   "version": "4.0.0",
-  "description": "A starting point for Polymer apps",
-  "author": "The Polymer Authors",
+  "description": "application to listen to our talent",
+  "author": "IMAGOS",
   "license": "BSD-3-Clause",
-  "repository": "Polymer/polymer-starter-kit",
+  "repository": "TBD",
   "scripts": {
     "start": "polymer serve",
     "build": "polymer build",
@@ -23,6 +23,7 @@
     "@polymer/iron-selector": "^3.0.0-pre.15",
     "@polymer/paper-button": "^3.0.1",
     "@polymer/paper-icon-button": "^3.0.0-pre.15",
+    "@polymer/paper-input": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
     "@webcomponents/webcomponentsjs": "^2.0.0"
   },

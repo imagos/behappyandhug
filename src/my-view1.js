@@ -74,7 +74,6 @@ class MyView1 extends PolymerElement {
   _loadQuestions(idPoll,namePoll){
     var self=this;
     var refPoll='/poll/'+idPoll; //where("poll","==",refPoll)
-    console.info('questions ==> ' + refPoll);
     db.settings({timestampsInSnapshots: true});
     this.arrQuestions=[];
     db.collection("questions").where("active","==",true)
@@ -106,11 +105,10 @@ class MyView1 extends PolymerElement {
               elem.withOptions=doc.data().withOptions;
               elem.withOpenAnswer=doc.data().withOpenAnswer;
               elem.options=item.options;
-              
+              elem.userUid=self.userUid;
               self.$.main.appendChild(elem);
               
               self.arrQuestions.push(item);
-              console.info(item);
           });
           
       });

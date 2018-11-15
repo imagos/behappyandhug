@@ -1,6 +1,9 @@
 import { html, PolymerElement } from '@polymer/polymer/polymer-element.js';
 import { GestureEventListeners } from '@polymer/polymer/lib/mixins/gesture-event-listeners.js';
 import '@polymer/polymer/lib/elements/dom-repeat.js';
+import '@polymer/paper-input/paper-input.js';
+import '@polymer/paper-input/paper-textarea.js';
+import '@polymer/paper-input/paper-input-container.js';
 import '@polymer/paper-button/paper-button.js';
 
 class QuestionDetail extends GestureEventListeners(PolymerElement) {
@@ -67,17 +70,34 @@ class QuestionDetail extends GestureEventListeners(PolymerElement) {
             margin: 5px !important;
             width: 100%;
         }
+        .button_verify{
+          background-color: blue;
+          color: white;
+        }
+        .button_cancel{
+          background-color: gray;
+          color: white;
+        }
+        .card-actions{
+          text-align: center;
+        }
         </style>
         <div class="card">
             <div class="paper-header">{{title}}</div>
             <template is="dom-repeat" items="[[options]]">
                 <div class="width_100">
-                    <div on-click="_assess" data='{{item}}' dataKudo='{{kudo.id}}' style$='background-image: url({{item.icon}});' class='kudo_base'>&nbsp;</div>  
+                    <div data='{{item}}' data-question='{{questionId}}' style$='background-image: url({{item.icon}});' class='kudo_base' on-tap='checkOption'>&nbsp;</div>  
                     <div class="kudo_title">{{item.text}}</div>
                 </div>
             </template>
-            <paper-button class="button_verify" on-click="sendAnswer">Enviar</paper-button>
-            <paper-button class="button_cancel" on-click="reset">Omitir</paper-button>
+            <template is="dom-if" if="{{withOpenAnswer}}">
+                <paper-textarea id="opinion" label="Por favor ingresa tu comentario" char-counter></paper-textarea>
+            </template>
+            <div class="cards-actions">
+                <paper-button class="button_verify" on-click="sendAnswer" data='{{questionId}}'>Enviar</paper-button>
+                <paper-button class="button_cancel" on-click="reset">Omitir</paper-button>
+            </div>
+
         </div>
 `;
   }
@@ -85,6 +105,14 @@ class QuestionDetail extends GestureEventListeners(PolymerElement) {
   static get is() { return 'question-detail'; }
   static get properties() {
       return {
+          userUid: {
+            type: String,
+            notify: true
+          },
+          questionId: {
+              type: String,
+              notify: true              
+          },
           options: {
               type: Array,
               notify: true,
@@ -98,17 +126,56 @@ class QuestionDetail extends GestureEventListeners(PolymerElement) {
               type: String,
               notify: true
           },
-          required:{
+          withOptions:{
               type: Boolean,
               notify: true,
               value:false
           },
+          withOpenAnswer:{
+              type: Boolean,
+              notify: true,
+              value:false
+          },
+          optionSelected: {
+              type: String,
+              notify: true,
+              value: "Prueba"
+          }
       };
   }
   ready(){
       super.ready();
-      console.info('me crearon');
-  }  
+  }
+  checkOption(e){
+    //var kudoSeleccionado = Polymer.dom(e).localTarget;
+    console.info(e);
+    // var _card = kudoSeleccionado.data;
+    // var idKudo = kudoSeleccionado.datakudo;
+    // var idCard  = _card.id;
+    // for (var _idCard in this.cards) {
+    //     if(this.cards[_idCard].idCard != idCard){
+    //       var _idBtnKudo=this.$$('#id_img_' +this.cards[_idCard].idCard +'_' +idKudo);
+    //       _idBtnKudo.classList.remove('kudo_enable');
+    //     }
+    // }
+  }
+  sendAnswer(e){
+    db.settings({timestampsInSnapshots: true});
+    var answer={};
+    var self=this;
+    answer.questionId=self.questionId;
+    if(self.withOpenAnswer){
+        //answer.text=self.$.opinion.text;
+    }
+    answer.userUid=self.userUid;
+    answer.optionSelected=self.optionSelected;
+    
+    db.collection("answers").add(answer)
+    .then(function() {
+      self.message="Opinión registrada con éxito!";
+    });
+    console.info(self.$.opinion);
+  }
 }
 
 window.customElements.define(QuestionDetail.is, QuestionDetail);
