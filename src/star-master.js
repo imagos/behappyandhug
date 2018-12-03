@@ -12,23 +12,39 @@ import { PolymerElement, html } from '@polymer/polymer/polymer-element.js';
 import './shared-styles.js';
 import './question-detail.js';
 
-class MyView1 extends PolymerElement {
+class StarMaster extends PolymerElement {
   static get template() {
     return html`
       <style include="shared-styles">
         :host {
           display: block;
           padding: 0px;
+          font-family: 'Roboto Condensed', sans-serif;
+        }
+        .container{
+          position: relative;
         }
       </style>
-      <div id="main">
-        
+      <div id="main" class="container">
       </div>
+
     `;
   }
   static get properties() {
     return {
       userUid: {
+        type: String,
+        notify: true
+      },
+      userPicture: {
+        type: String,
+        notify: true
+      },
+      nickname: {
+        type: String,
+        notify: true,
+      },
+      groupId: {
         type: String,
         notify: true
       },
@@ -41,39 +57,23 @@ class MyView1 extends PolymerElement {
         type:   Array,
         notify: true,
         reflectToAttribute: true,
-      }, 
+      },
+      numQuestions: {
+        type: Number,
+        notify: true,
+        value: 0
+      }
     };
   }
   ready(){
     super.ready();
-    this._loadPoll(); 
+    this._loadQuestions(); 
   }
   
-  _loadPoll(){
+
+  _loadQuestions(){
     var self=this;
-    db.settings({timestampsInSnapshots: true});
-    this.arrPolls=[];
-    db.collection("poll").where("active","==",true)
-      .get()
-      .then(function(querySnapshot) {
-          querySnapshot.forEach(function(doc) {
-              var item={};
-              item.id     = doc.id;
-              item.name   = doc.data().name;
-              console.info(item);
-              self._loadQuestions(item.id,doc.data().name);
-              self.arrPolls.push(item);
-          });
-          
-      })
-      .catch(function(error) {
-          console.log("Error getting poll: ", error);
-      });
-  }
-  
-  _loadQuestions(idPoll,namePoll){
-    var self=this;
-    var refPoll='/poll/'+idPoll; //where("poll","==",refPoll)
+    var zindex=10;
     db.settings({timestampsInSnapshots: true});
     this.arrQuestions=[];
     db.collection("questions").where("active","==",true)
@@ -82,12 +82,9 @@ class MyView1 extends PolymerElement {
           querySnapshot.forEach(function(doc) {
               var item={};
               var options=[];
-              //console.info(doc.data());
-              
-              item.pollId=  idPoll;
               item.questionId=doc.id;
-              item.namePoll=namePoll;
               item.question = doc.data().question;
+              item.background = doc.data().background;
               item.withOptions = doc.data().withOptions;
               item.withOpenAnswer = doc.data().withOpenAnswer;
               if(item.withOptions){
@@ -104,11 +101,21 @@ class MyView1 extends PolymerElement {
               elem.title=doc.data().question;
               elem.withOptions=doc.data().withOptions;
               elem.withOpenAnswer=doc.data().withOpenAnswer;
+              elem.background=doc.data().background;
+              elem.toShare=doc.data().toShare;
+              
               elem.options=item.options;
               elem.userUid=self.userUid;
-              self.$.main.appendChild(elem);
+              elem.userPicture=self.userPicture;
+              elem.nickname=self.nickname;
+              //elem.groupId=self.groupId;
+              elem.zindex=zindex;
+              elem.visible=true;  
               
+              self.$.main.appendChild(elem);
               self.arrQuestions.push(item);
+              zindex--;
+              self.numQuestions++;
           });
           
       });
@@ -116,31 +123,6 @@ class MyView1 extends PolymerElement {
       //     console.log("Error getting poll: ", error);
       // });
   }
-
-
-              // if(item.withOptions){
-              //   item.arrAnswer=[];
-              //   var _arrAnswer=doc.data().answers;
-              //   for (var index = 0, len = _arrAnswer.length; index < len; ++index) {
-              //       console.log(_arrAnswer[index]);
-              //       self._loadAnswer(_arrAnswer[index],doc.id);    
-              //   }
-              // }  
-  // _loadAnswer(_answerId,_questionId){
-  //   var self=this;
-  //   db.settings({timestampsInSnapshots: true});
-  //   db.collection("answers").doc(_answerId)
-  //   .onSnapshot(function(doc) {
-  //       var objIndex = self.arrQuestions.findIndex((obj => obj.questionId == _questionId));
-  //       console.log("Current data: ", doc.data());
-  //       self.arrQuestions[objIndex].arrAnswer.push(doc.data());
-  //       console.info(self.arrQuestions[objIndex]);
-  //   });
-  //     // .catch(function(error) {
-  //     //     console.log("Error getting poll: ", error);
-  //     // });
-  // }
-
 }
 
-window.customElements.define('my-view1', MyView1);
+window.customElements.define('star-master', StarMaster);

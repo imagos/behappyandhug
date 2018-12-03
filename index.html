@@ -15,8 +15,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <meta name="generator" content="Polymer Starter Kit">
     <meta name="viewport" content="width=device-width, minimum-scale=1, initial-scale=1, user-scalable=yes">
 
-    <title>Be happy</title>
-    <meta name="description" content="Be Happy">
+    <title>Star</title>
+    <meta name="description" content="Application to listen our talent every day">
 
     <!--
       The `<base>` tag below is present to support two advanced deployment options:
@@ -40,12 +40,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Add to homescreen for Chrome on Android. Fallback for manifest.json -->
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Be Happy">
+    <meta name="application-name" content="Star Agile">
 
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Be Happy">
+    <meta name="apple-mobile-web-app-title" content="Star Agile">
 
     <!-- Homescreen icons -->
     <link rel="apple-touch-icon" href="images/manifest/icon-48x48.png">
@@ -76,7 +76,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       // Load and register pre-caching Service Worker
       // if ('serviceWorker' in navigator) {
       //   window.addEventListener('load', function() {
-      //     navigator.serviceWorker.register('service-worker.js', {
+      //   navigator.serviceWorker.register('service-worker.js', {
       //       scope: MyAppGlobals.rootPath
       //     });
       //   });
@@ -85,7 +85,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
     <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
-
+    
     <!-- Load your application shell -->
     <script type="module" src="src/be-happy.js"></script>
 
@@ -93,7 +93,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style>
       body {
         margin: 0;
-        font-family: "Roboto", "Noto", sans-serif;
+        font-family: 'Roboto Condensed', sans-serif;
         line-height: 1.5;
         min-height: 100vh;
         background-color: #eeeeee;
@@ -119,6 +119,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     firebase.initializeApp(config,{timestampsInSnapshots: true});
     var db = firebase.firestore();
     </script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
   </head>
   <body>
     <be-happy></be-happy>

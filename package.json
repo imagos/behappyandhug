@@ -1,7 +1,7 @@
 {
-  "name": "BeHappy",
+  "name": "Star",
   "version": "4.0.0",
-  "description": "application to listen to our talent",
+  "description": "Application to listen to our talent",
   "author": "IMAGOS",
   "license": "BSD-3-Clause",
   "repository": "TBD",
@@ -22,8 +22,11 @@
     "@polymer/iron-pages": "^3.0.0-pre.15",
     "@polymer/iron-selector": "^3.0.0-pre.15",
     "@polymer/paper-button": "^3.0.1",
-    "@polymer/paper-icon-button": "^3.0.0-pre.15",
+    "@polymer/paper-dialog": "^3.0.1",
+    "@polymer/paper-dialog-scrollable": "^3.0.1",
+    "@polymer/paper-icon-button": "^3.0.1",
     "@polymer/paper-input": "^3.0.1",
+    "@polymer/paper-toast": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
     "@webcomponents/webcomponentsjs": "^2.0.0"
   },
