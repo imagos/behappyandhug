@@ -26,7 +26,7 @@ class QuestionDetail extends GestureEventListeners(PolymerElement) {
           line-height: 50px;
           color: white;
           transition: height 0.2s;
-          background-color: #072146;
+          background-color: #004481;
           /*border-radius: 5px;*/
           height: 250px; /* You must set a specified height */
           background-position: center; /* Center the image */
@@ -195,50 +195,16 @@ class QuestionDetail extends GestureEventListeners(PolymerElement) {
   static get is() { return 'question-detail'; }
   static get properties() {
       return {
-          userUid: {
-            type: String,
-            notify: true
-          },
-          userPicture: {
-            type: String,
-            notify: true
-          },
-          nickname: {
-            type: String,
-            notify: true
-          },
-          
-          groupId: {
-            type: String,
-            notify: true,
-            value: 'Benefits&Services'
-          },
-          questionId: {
-              type: String,
-              notify: true              
-          },
-          background: {
-              type: String,
-              notify: true              
-          },
-          options: {
-              type: Array,
-              notify: true,
-              value: function() { return []; }
-          },
-          placeholder:{
-              type: String,
-              notify: true
-          },
-          title:{
-              type: String,
-              notify: true
-          },
-          toShare:{
-              type: Boolean,
-              notify: true,
-              value:false
-          },
+          userUid:  { type: String, notify: true },
+          avatar:   { type: String, notify: true },
+          nickname: { type: String, notify: true },
+          teamId:   { type: String, notify: true },
+          questionId: { type: String, notify: true },
+          background: { type: String, notify: true },
+          options:    { type: Array,  notify: true, value: function() { return []; }},
+          placeholder:{ type: String, notify: true },
+          title:      { type: String, notify: true },
+          toShare:    { type: Boolean,notify: true, value:false },
           withOptions:{
               type: Boolean,
               notify: true,
@@ -274,38 +240,50 @@ class QuestionDetail extends GestureEventListeners(PolymerElement) {
   checkOption(e){
     var self=this;
     var text=e.path[0].data;
-    var answer={};
-    answer.questionId=self.questionId;
-    answer.text=text;
-    answer.userUid=self.userUid;
-    answer.registerDate=firebase.firestore.Timestamp.now();
-    answer.groupId=self.groupId;
-    db.collection("answers").add(answer)
+    var key=self.questionId+self.userUid;
+    db.collection("answers").doc(key).set({
+        questionId: self.questionId,
+        text:       text,
+        userUid:    self.userUid,
+        teamId:     self.teamId,
+        registerDate: firebase.firestore.Timestamp.now()
+    })
     .then(function() {
       self.visible=false;
-    });    
+    })
+    .catch(function(error) {
+      console.error("Error writing document: ", error);
+    });
+    
   }
   shareAnswer(e){
-    var post={};
+    
     var self=this;
     var comment=self.$.txtOpinion.value;
     if(comment.trim().length==0){
       self.$.txtOpinion.focus();
+      return;
     }
-    post.numLike=0;
-    post.numDislike=0;
-    post.location=self.groupId;
-    post.text=self.$.txtOpinion.value;
-    post.registerDate=firebase.firestore.Timestamp.now();
-    post.status=true;
-    post.nickname=self.nickname;
-    post.userPicture=self.userPicture;
-    db.collection("posts").add(post)
+    var key=self.questionId+self.userUid;
+    db.collection("posts").doc(key).set({
+        numLike:        0,
+        numDislike:     0,
+        teamId:         self.teamId,
+        text:           self.$.txtOpinion.value,
+        status:         true,
+        nickname:       self.nickname,
+        avatar:         self.avatar,
+        registerDate:   firebase.firestore.Timestamp.now()
+    })
     .then(function() {
       self.visible=false;
       self.$.toastConfirmation.open();
+    })
+    .catch(function(error) {
+      console.error("Error writing post: ", error);
     });
   }
+  
   close(){
     this.visible=false;
   }
@@ -342,16 +320,22 @@ class QuestionDetail extends GestureEventListeners(PolymerElement) {
       var elem=document.createElement('post-detail');
       var _row=data;
       elem.post=_row;
+      elem.nickname = this.nickname;
+      elem.avatar   = this.avatar;
+      elem.userUid  = this.userUid;
+      elem.teamId   = this.teamId;
       this.$.postWall.appendChild(elem);        
   }
   _loadlistReport(){
     var self=this;
     db.settings({timestampsInSnapshots: true});
-        db.collection("posts")
+        db.collection("posts").orderBy("registerDate","desc")
           .get()
           .then(function(querySnapshot) {
               querySnapshot.forEach(function(doc) {
-                self._createPost(doc.data());
+                var _doc=doc.data();
+                _doc.id=doc.id;
+                self._createPost(_doc);
               });
           })
           .catch(function(error) {

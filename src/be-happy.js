@@ -8,8 +8,12 @@ import '@polymer/app-route/app-location.js';
 import '@polymer/app-route/app-route.js';
 import '@polymer/iron-selector/iron-selector.js';
 import '@polymer/paper-icon-button/paper-icon-button.js';
+import '@polymer/iron-icons/iron-icons.js';
+import '@polymer/iron-icon/iron-icon.js';
+import '@polymer/paper-icon-button/paper-icon-button.js';
 import './my-icons.js';
 import './star-master.js';
+import './login-free.js';
 import './shared-styles-main.js';
 
 // Gesture events like tap and track generated from touch will not be
@@ -44,20 +48,21 @@ class BeHappy extends PolymerElement {
           height: 34px;
         }
       </style>
-
+      <div hidden$="{{loggedIn}}" width="100%" style="text-align:center;">
+        <login-free id='login' name-app=[[nameApp]] send-login={{sendLogin}}></login-free>
+      </div>
       <div hidden$="{{!loggedIn}}" width="100%" style="text-align:center;">
         <app-toolbar style="background-color:#072146;">
-          <paper-icon-button icon="menu" ></paper-icon-button>
-          <paper-listbox slot="dropdown-content">
-            <paper-item>alpha</paper-item>
-          </paper-listbox>
+          <paper-icon-button icon="arrow-back" id="mBack" on-tap="closeChat" style="display:none"></paper-icon-button>
+          <paper-icon-button icon="icons:home" on-tap="_setMaster"></paper-icon-button>
+          
           <div main-title>Star [[nameApp]]</div>
           <div style="display:table">
-            <img id="imgProfile" class$="avatar [[userPicture]]">
+            <div id="imgProfile" class$="avatar {{avatar}}"></div>
           </div>
         </app-toolbar>
         
-        <star-master id='master'></star-master>
+        <star-master id='master' active-comments={{activeComments}}></star-master>
         <div style="font-size: 8px;color:gray;">Developed by @imago.group for BBVA Continental</div>
       </div>
     `;
@@ -76,7 +81,7 @@ class BeHappy extends PolymerElement {
         notify: true,
         value: 'Andrés'
       },
-      groupId:{
+      teamId:{
         type: String,
         notify: true,
         value: 'Benefits&Services'
@@ -86,7 +91,7 @@ class BeHappy extends PolymerElement {
         notify: true,
         value: 'Agile'
       },
-      userPicture:{
+      avatar:{
         type: String,
         notify: true,
         value: 'a1'
@@ -94,14 +99,31 @@ class BeHappy extends PolymerElement {
       loggedIn:{
         type: Boolean,
         notify: true,
-        value: true
+        value: false
+      },
+      activeComments:{
+        type: Boolean,
+        notify: true,
+        value: false
+      },
+      sendLogin:{
+        type: Boolean,
+        notify: true,
+        value: false,
+        observer: '_saveLogin'
       },
     };
   }
 
   ready(){
     super.ready();
+    db.settings({timestampsInSnapshots: true});
     this._login();
+  }
+  _saveLogin(newValue, oldValue){
+    if(newValue){
+      this._addUser(this.$.login.nickname, this.$.login.selectedAvatar, this.$.login.teamId);
+    }
   }
   _login(){
     var parent = this;
@@ -115,14 +137,60 @@ class BeHappy extends PolymerElement {
         // User is signed in.
         var isAnonymous = user.isAnonymous;
         parent.uid = user.uid;
+        parent.$.login.userUid=user.uid;
         parent.$.master.userUid=user.uid;
-        parent.$.master.groupId=parent.groupId;
-        parent.$.master.nickname=parent.nickname;
-        parent.$.master.userPicture=parent.userPicture;
+        parent._verify(user.uid);
       } else {
         console.info('bye bye');
       }
-      // ...
+    });
+  }
+  _setMaster(){
+    var parent = this;
+    parent.$.master.teamId=parent.teamId;
+    parent.$.master.nickname=parent.nickname;
+    parent.$.master.avatar=parent.avatar;                
+    parent.$.master._loadQuestions();
+  }
+  _verify(){
+    var parent = this;
+    var docRef = db.collection("users").doc(parent.uid);
+    docRef.get().then(function(doc) {
+      if (doc.exists) {
+        //console.log("Document data:", doc.data());
+        parent.teamId=doc.data().teamId;
+        parent.nickname=doc.data().nickname;
+        parent.avatar=doc.data().avatar;
+        parent.area=doc.data().area;
+        parent.loggedIn=true;
+        parent._setMaster();
+      } else {
+        // doc.data() will be undefined in this case
+        //console.log("No such document!");
+        parent.loggedIn=false;
+      }
+    }).catch(function(error) {
+        console.log("Error getting document:", error);
+    });
+  }
+  /*
+  *        area: _area,
+  */
+  _addUser(_nickname,_avatar,_teamId){
+    var parent = this;
+    db.collection("users").doc(parent.uid).set({
+      nickname: _nickname,
+      avatar: _avatar,
+      teamId: _teamId,
+      registerDate: firebase.firestore.Timestamp.now()
+    })
+    .then(function() {
+        //console.log("Document successfully written!");
+        parent.loggedIn=true;
+        parent._setMaster();
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error);
     });
   }
 }
