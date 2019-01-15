@@ -47,6 +47,13 @@ class StarWall extends PolymerElement {
     elem.avatar   = this.avatar;
     elem.userUid  = this.user.uid;
     elem.team     = this.team;
+    elem.addEventListener('kick', function(e){
+      // logs the instance of event-targeting that hosts #myButton
+      console.info('target is:', e.target);
+      // logs [#myButton, ShadowRoot, event-retargeting,
+      //       body, html, document, Window]
+      console.info('composedPath is:', e.composedPath());
+    });
     this.$.postWall.appendChild(elem);
   }
 

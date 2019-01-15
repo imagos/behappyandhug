@@ -25,7 +25,7 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
           text-align: left !important;
         }
         </style>
-        <div style="height: 70vh;" hidden=[[cancel]]>
+        <div style="height: 40vh;" hidden=[[cancel]]>
           <div style="overflow-y:auto;height:55vh;" id="chat">
 
           </div>
@@ -75,7 +75,7 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
             console.log(doc.data());
           });
           //self.$.btnSendMessage.style.display = "block";
-          self.cancel=true;
+          self.cancel=false;
       })
       .catch(function(error) {
           console.log("Error getting Visit Report: ", error);

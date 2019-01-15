@@ -75,7 +75,7 @@ class StarShare extends GestureEventListeners(PolymerElement) {
             </div>
 
             <div class="card-actions">
-                <paper-button class="button_verify" on-tap="_addComment">Enviar</paper-button>
+                <paper-button class="button_verify" on-tap="_addPost">Enviar</paper-button>
             </div>
         </div>
 `;
@@ -95,8 +95,25 @@ class StarShare extends GestureEventListeners(PolymerElement) {
     console.info('cargando share');
   }
   
-  _addComment(){
+  _getToday(){
+    var today = new Date();
+    var dd = today.getDate();
+    var mm = today.getMonth()+1; //January is 0!
+    var yyyy = today.getFullYear();
+    
+    if(dd<10) {
+        dd = '0'+dd
+    } 
+    if(mm<10) {
+        mm = '0'+mm
+    } 
+    today = yyyy + '-' + mm + '-' + dd;
+    return today;
+  }
+  
+  _addPost(){
     var self=this;
+    var date=self._getToday();
     var text="";
     if(this.$.comment==""){
         return;
@@ -107,6 +124,7 @@ class StarShare extends GestureEventListeners(PolymerElement) {
     var user    =self.user;
     db.collection("posts").add({
         uid:        user.uid,
+        date:       date,
         text:       text,
         team:       user.team,
         area:       user.area,

@@ -100,6 +100,7 @@ class PostDetail extends GestureEventListeners(PolymerElement) {
   }
   _openComments(e){
     var self=this;
+    this.dispatchEvent(new CustomEvent('kick', {detail: {kicked: true}}));
     self.$.comments.loadComments(self.post.id);
     self.$.comments.cancel=false;
   }

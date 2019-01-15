@@ -77,6 +77,7 @@ class StarApp extends PolymerElement {
         <app-header-layout has-scrolling-region="">
           <app-header slot="header" condenses="" reveals="" effects="waterfall">
             <app-toolbar>
+              <paper-icon-button icon="arrow-back" id="mBack" on-tap="closeChat" style="display:none"></paper-icon-button>
               <paper-icon-button icon="my-icons:menu" drawer-toggle=""></paper-icon-button>
               <div main-title class="center">STAR [[nameApp]]</div>
               <div style="display:table">

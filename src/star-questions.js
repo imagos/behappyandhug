@@ -134,10 +134,34 @@ class StarQuestions extends PolymerElement {
             existsAnswer=true;
           });
           if(existsAnswer){
-            self.visibleShare=true;
-            console.info('share visible');
+            self._verifyShare(_questionId,_questionData);
+            console.info('verify Share');
           }else{
             self._createQuestion(_questionId,_questionData);
+          }
+      })
+      .catch(function(error) {
+        self.nextPage = 'error';
+        self.message  = error;
+      });
+  }
+  
+  _verifyShare(_questionId,_questionData){
+    var self=this;
+    var existsAnswer=false;
+    var today=self._getToday();
+    console.log('user: ' + self.user.uid + " | today: " + today);
+    db.collection("posts").where("uid","==",self.user.uid).where("date","==",today)
+      .get()
+      .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            console.info(doc.data());
+            existsAnswer=true;
+          });
+          if(existsAnswer){
+            self.nextPage='wall';
+          }else{
+            self.visibleShare=true;
           }
       })
       .catch(function(error) {
