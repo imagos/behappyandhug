@@ -73,14 +73,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       */
       window.MyAppGlobals = { rootPath: '/' };
 
-      //Load and register pre-caching Service Worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js', {
-            scope: MyAppGlobals.rootPath
-          });
-        });
-      }
+      // Load and register pre-caching Service Worker
+      // if ('serviceWorker' in navigator) {
+      //   window.addEventListener('load', function() {
+      //   navigator.serviceWorker.register('service-worker.js', {
+      //       scope: MyAppGlobals.rootPath
+      //     });
+      //   });
+      // }
     </script>
 
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
@@ -118,12 +118,39 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     };
     firebase.initializeApp(config,{timestampsInSnapshots: true});
     var db = firebase.firestore();
+    var email=window.localStorage.getItem('emailForSignIn');
+    console.info('entrando');
+    var self=this;
+    if (firebase.auth().isSignInWithEmailLink(window.location.href)) {
+      var email = window.localStorage.getItem('emailForSignIn');
+      if (!email) {
+          email = window.prompt('Please provide your email for confirmation');
+      }
+      
+      firebase.auth().signInWithEmailLink(email, window.location.href)
+      .then(function(result) {
+        // Clear email from storage.
+        window.localStorage.removeItem('emailForSignIn');
+        console.info(result);
+        window.close();
+        // You can access the new user via result.user
+        // Additional user info profile not available via:
+        // result.additionalUserInfo.profile == null
+        // You can check if the user is new or existing:
+        // result.additionalUserInfo.isNewUser
+      })
+      .catch(function(error) {
+        // Some error occurred, you can inspect the code: error.code
+        // Common errors could be invalid email and invalid or expired OTPs.
+      });
+    }else {
+      window.location.replace("https://behappyandhug.firebaseapp.com/");
+    }
     </script>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-    
   </head>
   <body>
-    <star-app></star-app>
+    
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>

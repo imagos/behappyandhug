@@ -1,7 +1,7 @@
 {
-  "name": "Star",
-  "short_name": "Star",
-  "description": "Application to listen our talent every day",
+  "name": "star",
+  "short_name": "star",
+  "description": "Application to listen to our talent every day",
   "icons": [
     {
       "src": "images/manifest/icon-192x192.png",

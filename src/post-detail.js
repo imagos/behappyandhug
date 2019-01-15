@@ -73,7 +73,7 @@ class PostDetail extends GestureEventListeners(PolymerElement) {
               
               <iron-icon icon="communication:chat-bubble-outline" id="comment" data=[[post]] on-tap="_openComments"></iron-icon>
             </div>
-            <answers-post id='comments' user-uid=[[userUid]] nickname=[[nickname]] avatar=[[avatar]] team-id=[[teamId]] style="display:none"></answers-post>
+            <answers-post id='comments' user-uid=[[userUid]] nickname=[[nickname]] avatar=[[avatar]] team=[[team]]></answers-post>
         </div>
 `;
   }
@@ -84,7 +84,7 @@ class PostDetail extends GestureEventListeners(PolymerElement) {
             userUid:  { type: String, notify: true},
             nickname: { type: String, notify: true},
             avatar:   { type: String, notify: true},
-            teamId:   { type: String, notify: true},
+            team:     { type: String, notify: true},
             post:     { type: Object, notify: true},
             
       };
@@ -101,7 +101,7 @@ class PostDetail extends GestureEventListeners(PolymerElement) {
   _openComments(e){
     var self=this;
     self.$.comments.loadComments(self.post.id);
-    self.$.comments.style.display = "block";
+    self.$.comments.cancel=false;
   }
   _closeComments(e){
     this.$.comments.style.display = "none";

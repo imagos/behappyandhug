@@ -6,16 +6,7 @@ class CommentDetail extends GestureEventListeners(PolymerElement) {
   static get template() {
     return html`
         <style include="shared-styles-main">
-        .div-author-comment{
-          padding:5px;
-          background:#fff;
-          border-radius: 18px;
-          margin-top:5px;
-          text-align: left;
-        }
-        .text-author-comment{
-          color:#365899;
-        }
+
         </style>
         <div class="div-author-comment"><div  class$="avatar [[comment.avatar]]"></div>
             <b class="text-author-comment">[[comment.nickname]]</b>: [[comment.message]]

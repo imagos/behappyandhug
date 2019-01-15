@@ -1,6 +1,6 @@
 {
-  "name": "Star",
-  "version": "4.0.0",
+  "name": "star",
+  "version": "1.0.0",
   "description": "Application to listen to our talent",
   "author": "IMAGOS",
   "license": "BSD-3-Clause",
@@ -26,9 +26,7 @@
     "@polymer/paper-dialog-scrollable": "^3.0.1",
     "@polymer/paper-icon-button": "^3.0.1",
     "@polymer/paper-input": "^3.0.1",
-    "@polymer/paper-toast": "^3.0.1",
     "@polymer/polymer": "^3.0.0",
-    "@vaadin/vaadin-combo-box": "^4.2.0",
     "@webcomponents/webcomponentsjs": "^2.0.0"
   },
   "devDependencies": {

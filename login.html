@@ -73,30 +73,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       */
       window.MyAppGlobals = { rootPath: '/' };
 
-      //Load and register pre-caching Service Worker
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-        navigator.serviceWorker.register('service-worker.js', {
-            scope: MyAppGlobals.rootPath
-          });
-        });
-      }
+      // Load and register pre-caching Service Worker
+      // if ('serviceWorker' in navigator) {
+      //   window.addEventListener('load', function() {
+      //   navigator.serviceWorker.register('service-worker.js', {
+      //       scope: MyAppGlobals.rootPath
+      //     });
+      //   });
+      // }
     </script>
 
     <!-- Load webcomponents-loader.js to check and load any polyfills your browser needs -->
     <script src="node_modules/@webcomponents/webcomponentsjs/webcomponents-loader.js"></script>
     
     <!-- Load your application shell -->
-    <script type="module" src="src/star-app.js"></script>
+    <script type="module" src="src/star-login.js"></script>
 
     <!-- Add any global styles for body, document, etc. -->
     <style>
       body {
-        margin: 0;
+        margin: 0px;
+        padding: 0px;
         font-family: 'Roboto Condensed', sans-serif;
         line-height: 1.5;
         min-height: 100vh;
-        background-color: #eeeeee;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-image: url(../images/background.help.jpg);
+        background-color: #17325f;
+        text-align: center;
+        color: #fff;
       }
     </style>
 <!-- Firebase App is always required and must be first -->
@@ -118,15 +124,44 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     };
     firebase.initializeApp(config,{timestampsInSnapshots: true});
     var db = firebase.firestore();
+
+    function GetURLParameter(sParam)
+    {
+        var sPageURL = window.location.search.substring(1);
+        var sURLVariables = sPageURL.split('&');
+        for (var i = 0; i < sURLVariables.length; i++) 
+        {
+            var sParameterName = sURLVariables[i].split('=');
+            if (sParameterName[0] == sParam) 
+            {
+                return sParameterName[1];
+            }
+        }
+    }
+
     </script>
     <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed" rel="stylesheet">
-    
   </head>
-  <body>
-    <star-app></star-app>
+  <body onload="verify()" class="background-help">
+    <h1>Bienvenido a Star Agile</h1>
+    <span>Confirma tus datos astronauta para nuestra aventura</span>
+    <div id="login"></div>
     <noscript>
       Please enable JavaScript to view this website.
     </noscript>
     <!-- Built with love using Polymer Starter Kit -->
   </body>
+  <script>
+  function verify(){
+    var guess = GetURLParameter('guess');
+    //var confirm = GetURLParameter('confirm');
+    console.info(guess);
+    var elem=document.createElement('star-login');
+    elem.guess = guess;
+    //elem.confirm = confirm;
+    elem.nameApp="Agile";
+    document.getElementById("login").appendChild(elem);
+  }
+
+  </script>
 </html>

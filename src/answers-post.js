@@ -25,7 +25,7 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
           text-align: left !important;
         }
         </style>
-        <div style="height: 70vh;">
+        <div style="height: 70vh;" hidden=[[cancel]]>
           <div style="overflow-y:auto;height:55vh;" id="chat">
 
           </div>
@@ -34,8 +34,8 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
               <paper-textarea id="txtMessage" label="[[nickname]], ingresa tu comentario..."></paper-textarea>
             </div>
             <div style="display:inline-block;width:20%;">
-              <paper-icon-button icon="icons:send" id="btnSendMessage" on-tap="sendMessage" autofocus></paper-icon-button>
-              <paper-icon-button icon="icons:cancel" id="btnClose" on-tap="closeSection" autofocus></paper-icon-button>
+              <paper-icon-button icon="icons:send"    id="btnSendMessage" on-tap="sendMessage"  autofocus></paper-icon-button>
+              <paper-icon-button icon="icons:cancel"  id="btnClose"       on-tap="closeSection" autofocus></paper-icon-button>
             </div>
           </div>
         </div>
@@ -49,7 +49,7 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
         nickname:   { type: String,     notify: true },
         avatar:     { type: String,     notify: true },
         userUid:    { type: String,     notify: true },
-        cancel:     { type: Boolean,    notify: true },
+        cancel:     { type: Boolean,    notify: true, value: true },
       };
   }
   ready(){
@@ -74,12 +74,18 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
             self.$.chat.appendChild(elem);
             console.log(doc.data());
           });
-          self.$.btnSendMessage.style.display = "block";
+          //self.$.btnSendMessage.style.display = "block";
+          self.cancel=true;
       })
       .catch(function(error) {
           console.log("Error getting Visit Report: ", error);
       });
   }
+  
+  closeSection(){
+    this.cancel=true;
+  }
+  
   sendMessage(e){
     var self=this;
       if(self.$.txtMessage.value.length!=0){
@@ -88,13 +94,14 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
             message:    self.$.txtMessage.value,
             nickname:    self.nickname,
             userUid:    self.userUid,
-            teamId:     self.teamId,
+            team:     self.team,
             avatar:     self.avatar,
             registerDate: firebase.firestore.Timestamp.now()
         })
         .then(function() {
             self.$.txtMessage.value="";
-            self.$.btnSendMessage.style.display = "none";
+            //self.$.btnSendMessage.style.display = "none";
+            self.cancel=true;
         })
         .catch(function(error) {
           console.error("Error writing document: ", error);

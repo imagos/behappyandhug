@@ -52,10 +52,9 @@ class BeHappy extends PolymerElement {
         <login-free id='login' name-app=[[nameApp]] send-login={{sendLogin}}></login-free>
       </div>
       <div hidden$="{{!loggedIn}}" width="100%" style="text-align:center;">
-        <app-toolbar style="background-color:#072146;">
+        <app-toolbar class="toolbar_main">
           <paper-icon-button icon="arrow-back" id="mBack" on-tap="closeChat" style="display:none"></paper-icon-button>
           <paper-icon-button icon="icons:home" on-tap="_setMaster"></paper-icon-button>
-          
           <div main-title>Star [[nameApp]]</div>
           <div style="display:table">
             <div id="imgProfile" class$="avatar {{avatar}}"></div>
@@ -165,8 +164,6 @@ class BeHappy extends PolymerElement {
         parent.loggedIn=true;
         parent._setMaster();
       } else {
-        // doc.data() will be undefined in this case
-        //console.log("No such document!");
         parent.loggedIn=false;
       }
     }).catch(function(error) {
