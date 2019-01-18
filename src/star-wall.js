@@ -29,11 +29,14 @@ class StarWall extends PolymerElement {
   }
   ready(){
     super.ready();
-    db.settings({timestampsInSnapshots: true});
-    console.log('cargando');
-    this._loadlistReport();
+    this._load();
   }
   
+  _load(){
+    db.settings({timestampsInSnapshots: true});
+    console.log('cargando');
+    this._loadlistReport();    
+  }
   _createPost(data){
     var elem=document.createElement('post-detail');
     var _row=data;

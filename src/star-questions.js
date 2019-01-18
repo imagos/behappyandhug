@@ -80,17 +80,18 @@ class StarQuestions extends PolymerElement {
   ready(){
     super.ready();
     db.settings({timestampsInSnapshots: true});
-    console.log(this.user);
+    this._validate();
+  }
+  _validate(){
     var self = this;
     var user = firebase.auth().currentUser;
-    if (user != null) {
+    console.log('Ready questions ==> ' + this.area );
+    if (user != null && this.area != undefined) {
       self._loadQuestion();
     } else {
       document.querySelector("star-app").set('route.path', "/login");
-    }
-    
+    }    
   }
-
   _getToday(){
     var today = new Date();
     var dd = today.getDate();
@@ -109,11 +110,6 @@ class StarQuestions extends PolymerElement {
 
   _loadQuestion(){
     var self=this;
-    if(!this.area){
-      //this.nextPage="login";
-      document.querySelector("star-app").set('route.path', "/login");
-      return;
-    }
     db.collection("questions").where("active","==",true).where("area","==",self.area).limit(1)
       .get()
       .then(function(querySnapshot) {
@@ -123,8 +119,8 @@ class StarQuestions extends PolymerElement {
       })
       .catch(function(error) {
         //self.nextPage = 'error';
-        document.querySelector("star-app").set('route.path', "/error");
         self.message  = error;
+        document.querySelector("star-app").set('route.path', "/error");
       });
 
   }

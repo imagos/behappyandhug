@@ -69,7 +69,7 @@ class StarApp extends PolymerElement {
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name=""        href="[[rootPath]]">        Inicio</a>
+            <a name="wall"        href="[[rootPath]]wall">        Inicio</a>
             <a name="about"   href="[[rootPath]]about">   Acerca de Star</a>
           </iron-selector>
         </app-drawer>
@@ -91,9 +91,9 @@ class StarApp extends PolymerElement {
             <star-success   next-page={{page}}  message={{message}}   name="success">   </star-success>
             <star-signup    next-page={{page}}  message={{message}}   name="signup"     user={{user}}   email=[[email]]   nickname={{nickname}} avatar={{avatar}} area={{area}} team={{team}}>    </star-signup>
             <star-confirm   next-page={{page}}  message={{message}}   name="confirm">   </star-confirm>
-            <star-questions next-page={{page}}  message={{message}}   name="questions"     user=[[user]]   nickname=[[nickname]] avatar=[[avatar]] area=[[area]] team=[[team]]>    </star-questions>
+            <star-questions next-page={{page}}  message={{message}}   name="questions"     user=[[user]]   nickname=[[nickname]] avatar=[[avatar]] area=[[area]] team=[[team]] id="questionsId">    </star-questions>
             <star-share     next-page={{page}}  message={{message}}   name="share"      user=[[user]]   nickname=[[nickname]] avatar=[[avatar]] area=[[area]] team=[[team]]>    </star-share>
-            <star-wall      next-page={{page}}  message={{message}}   name="wall"       user=[[user]]   nickname=[[nickname]] avatar=[[avatar]] area=[[area]] team=[[team]]>    </star-wall>
+            <star-wall      next-page={{page}}  message={{message}}   name="wall"       user=[[user]]   nickname=[[nickname]] avatar=[[avatar]] area=[[area]] team=[[team]] id="wallId">    </star-wall>
             <star-error     next-page={{page}}  message={{message}}   name="error">     </star-error>
             <star-about     next-page={{page}}                        name="about"      name-app=[[nameApp]]>   </star-about>
           </iron-pages>
@@ -134,8 +134,10 @@ class StarApp extends PolymerElement {
       this._createSession();
       return;
     }
+    console.info("route ==> " + page);
+    
     if (!page) {
-      this._verifyUser();
+      this.page = 'about';
     } else if (['login', 'signup',  'validate', 'questions','about','error','success','share','wall'].indexOf(page) !== -1) {
       this.page = page;
     } else {
@@ -149,6 +151,7 @@ class StarApp extends PolymerElement {
   }
 
   _pageChanged(page) {
+    console.info(this.user);
     console.info("_pageChanged: " + page);
     switch (page) {
       case 'login':
@@ -162,6 +165,14 @@ class StarApp extends PolymerElement {
         break;
       case 'questions':
         import('./star-questions.js');
+        try {
+          if(this.$.questionsId){
+            this.$.questionsId._validate();  
+          }
+        }
+        catch(err) {
+          console.log(err);
+        }
         break;
       case 'share':
         import('./star-share.js');
@@ -171,6 +182,14 @@ class StarApp extends PolymerElement {
         break;
       case 'wall':
         import('./star-wall.js');
+        try {
+          if(this.$.wallId){
+            this.$.wallId._load();  
+          }
+        }
+        catch(err) {
+          console.log(err);
+        }
         break;
       case 'error':
         import('./star-error.js');
@@ -186,28 +205,19 @@ class StarApp extends PolymerElement {
     self.user={};
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
+        console.info('verify');
+        console.info(user);
         self.user.uid=user.uid;
         self.email=user.email;
         self._getUser();
       } else {
         self.user={};
         self.page='login';
+        //document.querySelector("star-app").set('route.path', "/login");
       }
     });
   }
-  _reLogin(){
-    var self=this;
-    firebase.auth().currentUser.reauthenticateAndRetrieveDataWithCredential(credential)
-      .then(function(usercred) {
-        self.user.uid=usercred.uid;
-        self.email=usercred.email;
-        self._getUser();
-      })
-      .catch(function(error) {
-        self.user={};
-        self.page='login';
-      });
-  }  
+
   _getUser(){
     var self=this;
     const firestore = firebase.firestore();
@@ -228,15 +238,17 @@ class StarApp extends PolymerElement {
           self.avatar   = self.user.avatar;
           self.area     = self.user.area;
           self.team     = self.user.team;
-          //self.page='questions';
-          document.querySelector("star-app").set('route.path', "/questions");
+          if(self.page!='wall'){
+            self.page='questions';  
+          }
+          //document.querySelector("star-app").set('route.path', "/questions");
         } else {
-          //self.page='signup';
-          document.querySelector("star-app").set('route.path', "/signup");
+          self.page='signup';
+          //document.querySelector("star-app").set('route.path', "/signup");
         }
     }).catch(function(error) {
-        //self.page='error';
-        document.querySelector("star-app").set('route.path', "/error");
+        self.page='error';
+        //document.querySelector("star-app").set('route.path', "/error");
         self.message=error;
     });
   }
@@ -254,12 +266,12 @@ class StarApp extends PolymerElement {
           self.user={};
           self.user.uid=result.user.uid;
           self.email=email;
-          //self.page='success';
-          document.querySelector("star-app").set('route.path', "/success");
+          self.page='success';
+          //document.querySelector("star-app").set('route.path', "/success");
         })
         .catch(function(error) {
-          //self.page='error';
-          document.querySelector("star-app").set('route.path', "/error");
+          self.page='error';
+          //document.querySelector("star-app").set('route.path', "/error");
           self.message=error;
         });
     }
