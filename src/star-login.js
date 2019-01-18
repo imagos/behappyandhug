@@ -29,7 +29,7 @@ class StarLogin extends GestureEventListeners(PolymerElement) {
             --paper-input-container-color: white;
             --paper-input-container-input-color:white;
             --paper-input-container-focus-color: blue;
-            --paper-input-container-invalid-color: green;
+            --paper-input-container-invalid-color: red;
             --paper-input-container-input-color: white;
         }
         </style>
@@ -44,8 +44,7 @@ class StarLogin extends GestureEventListeners(PolymerElement) {
                   Ingresa tu correo corporativo
               </div>
               <div class="dataEntry">
-                  <paper-input id="email" placeholder="email" type="email" auto-validate=true></paper-input>
-
+                  <paper-input id="email" placeholder="email" type="email" auto-validate=true errorMessage="Ingrese un correo válido"></paper-input>
               </div>
             </div>
             <div class="card-actions">
@@ -101,12 +100,14 @@ class StarLogin extends GestureEventListeners(PolymerElement) {
             }
           });
           if(self.message!=""){
-            self.nextPage="error";
+            //self.nextPage="error";
+            document.querySelector("star-app").set('route.path', "/error");
           }
       })
       .catch(function(error) {
           self.message=error;
-          self.nextPage="error";
+          //self.nextPage="error";
+          document.querySelector("star-app").set('route.path', "/error");
       });
   }
   
@@ -121,11 +122,13 @@ class StarLogin extends GestureEventListeners(PolymerElement) {
     firebase.auth().sendSignInLinkToEmail(self.email, actionCodeSettings)
       .then(function() {
         window.localStorage.setItem('emailForSignIn', self.email);
-        self.nextPage ="validate";      
+        //self.nextPage ="validate";      
+        document.querySelector("star-app").set('route.path', "/validate");
       })
       .catch(function(error) {
         self.message=error;
-        self.nextPage="error";
+        //self.nextPage="error";
+        document.querySelector("star-app").set('route.path', "/error");
       });
   }
 }

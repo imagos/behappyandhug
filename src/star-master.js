@@ -54,8 +54,9 @@ class StarMaster extends PolymerElement {
           });
       })
       .catch(function(error) {
-        self.nextPage = 'error';
+        //self.nextPage = 'error';
         self.message  = error;
+        document.querySelector("star-app").set('route.path', "/error");
       });
 
   }
@@ -70,14 +71,16 @@ class StarMaster extends PolymerElement {
             existsAnswer=true;
           });
           if(existsAnswer){
-            self.nextPage='wall';
+            //self.nextPage='wall';
+            document.querySelector("star-app").set('route.path', "/wall");
           }else{
             self._createQuestion(_questionId,_questionData,_zindex);
           }
       })
       .catch(function(error) {
-        self.nextPage = 'error';
+        //self.nextPage = 'error';
         self.message  = error;
+        document.querySelector("star-app").set('route.path', "/error");
       });
   }
   

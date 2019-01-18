@@ -253,8 +253,9 @@ class QuestionDetail extends GestureEventListeners(PolymerElement) {
         console.log("Document written with ID: ", docRef.id);
     })
     .catch(function(error) {
-        self.nextPage="error";
+        //self.nextPage="error";
         self.message=error;
+        document.querySelector("star-app").set('route.path', "/error");
         console.error("Error adding document: ", error);
     });
   }

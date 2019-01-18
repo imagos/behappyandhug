@@ -81,11 +81,14 @@ class StarQuestions extends PolymerElement {
     super.ready();
     db.settings({timestampsInSnapshots: true});
     console.log(this.user);
-    console.log('AREA: ' + this.area);
-    console.log('TEAM: ' + this.team);
-    console.log('NICKNAME: ' + this.nickname);
-    console.log('AVATAR: ' + this.avatar);
-    this._loadQuestion();
+    var self = this;
+    var user = firebase.auth().currentUser;
+    if (user != null) {
+      self._loadQuestion();
+    } else {
+      document.querySelector("star-app").set('route.path', "/login");
+    }
+    
   }
 
   _getToday(){
@@ -107,7 +110,8 @@ class StarQuestions extends PolymerElement {
   _loadQuestion(){
     var self=this;
     if(!this.area){
-      this.nextPage="login";
+      //this.nextPage="login";
+      document.querySelector("star-app").set('route.path', "/login");
       return;
     }
     db.collection("questions").where("active","==",true).where("area","==",self.area).limit(1)
@@ -118,7 +122,8 @@ class StarQuestions extends PolymerElement {
           });
       })
       .catch(function(error) {
-        self.nextPage = 'error';
+        //self.nextPage = 'error';
+        document.querySelector("star-app").set('route.path', "/error");
         self.message  = error;
       });
 
@@ -141,7 +146,8 @@ class StarQuestions extends PolymerElement {
           }
       })
       .catch(function(error) {
-        self.nextPage = 'error';
+        //self.nextPage = 'error';
+        document.querySelector("star-app").set('route.path', "/error");
         self.message  = error;
       });
   }
@@ -159,14 +165,16 @@ class StarQuestions extends PolymerElement {
             existsAnswer=true;
           });
           if(existsAnswer){
-            self.nextPage='wall';
+            //self.nextPage='wall';
+            document.querySelector("star-app").set('route.path', "/wall");
           }else{
             self.visibleShare=true;
           }
       })
       .catch(function(error) {
-        self.nextPage = 'error';
+        //self.nextPage = 'error';
         self.message  = error;
+        document.querySelector("star-app").set('route.path', "/error");
       });
   }
   
@@ -192,7 +200,7 @@ class StarQuestions extends PolymerElement {
     self.nickname       =self.nickname;
     self.team           =self.team;
     self.area           =self.area;
-    self.visible=true;  
+    //self.visibleShare=false;  
   }
   
   _checkOption(e){
@@ -208,8 +216,9 @@ class StarQuestions extends PolymerElement {
     // }
     
     var _date=self._getToday();
-    console.log("text ==> " + text);
+
     console.log("self.userUid ==> " + self.userUid);
+    console.log("text ==> " + text);
     console.log("self.questionId ==> " + self.questionId);
     console.log("self.area ==> " + self.area);
     console.log("self.team ==> " + self.team);
@@ -224,11 +233,13 @@ class StarQuestions extends PolymerElement {
         registerDate: firebase.firestore.Timestamp.now()
     })
     .then(function(docRef) {
-        self.nextPage="share";
+        //self.nextPage="share";
+        document.querySelector("star-app").set('route.path', "/share");
         console.log("Document written with ID: ", docRef.id);
     })
     .catch(function(error) {
-        self.nextPage="error";
+        //self.nextPage="error";
+        document.querySelector("star-app").set('route.path', "/error");
         self.message=error;
         console.error("Error adding document: ", error);
     });

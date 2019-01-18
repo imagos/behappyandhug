@@ -58,10 +58,13 @@ class PostDetail extends GestureEventListeners(PolymerElement) {
         .card-actions{
           text-align: center;
         }
+        .inline{
+          display: inline-block;
+        }
         </style>
         <div class="card">
             <div id="imgProfile" class$="avatar [[post.avatar]]"></div> [[post.nickname]] 
-            <iron-icon icon="communication:location-on"></iron-icon>{{post.location}}[[post.teamId]] 
+            <iron-icon icon="communication:location-on"></iron-icon>[[post.team]]  - [[post.area]]
             <div>
                 [[post.text]]
             </div>
@@ -70,8 +73,11 @@ class PostDetail extends GestureEventListeners(PolymerElement) {
                 <paper-icon-button icon="icons:thumb-up" ></paper-icon-button>[[post.numLike]]
                 <paper-icon-button icon="icons:thumb-down"></paper-icon-button>[[post.numDislike]]
               </div>
-              
-              <iron-icon icon="communication:chat-bubble-outline" id="comment" data=[[post]] on-tap="_openComments"></iron-icon>
+
+              <div class="inline">
+                <iron-icon icon="communication:chat-bubble-outline" id="comment" data=[[post]] on-tap="_openComments"></iron-icon>
+              </div>
+              <div class="inline" id="numComments">[[numComments]]</div>
             </div>
             <answers-post id='comments' user-uid=[[userUid]] nickname=[[nickname]] avatar=[[avatar]] team=[[team]]></answers-post>
         </div>
@@ -86,11 +92,27 @@ class PostDetail extends GestureEventListeners(PolymerElement) {
             avatar:   { type: String, notify: true},
             team:     { type: String, notify: true},
             post:     { type: Object, notify: true},
-            
+            numComments:  { type: Number, notify: true, value:0},
       };
   }
   ready(){
     super.ready();
+  }
+  getAnswers(){
+    var self=this;
+    self.$.numComments.innerHTML="0";
+    self.numComments=0;
+    db.collection("postsComments").where("postId","==",self.post.id)
+      .get()
+      .then(function(querySnapshot) {
+          querySnapshot.forEach(function(doc) {
+            self.numComments++;
+          });
+          self.$.numComments.innerHTML=self.numComments;
+      })
+      .catch(function(error) {
+          console.log("Error getting Visit Report: ", error);
+      });
   }
   sendLike(e){
       console.info('like');

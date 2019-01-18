@@ -59,7 +59,8 @@ class StarSuccess extends GestureEventListeners(PolymerElement) {
     db.settings({timestampsInSnapshots: true});
   }
   _continue(){
-    this.nextPage="signup";
+    //this.nextPage="signup";
+    document.querySelector("star-app").set('route.path', "/signup");
   }
 }
 

@@ -135,7 +135,8 @@ class StarSignup extends GestureEventListeners(PolymerElement) {
             }
           });
           if(self.message!=""){
-            self.nextPage="error";
+            //self.nextPage="error";
+            document.querySelector("star-app").set('route.path', "/error");
             console.info(self.message);
           }
       })
@@ -175,12 +176,14 @@ class StarSignup extends GestureEventListeners(PolymerElement) {
       self.nickname=self.user.nickname;
       self.avatar=self.user.avatar;
       console.info(self.user);
-      self.nextPage='master';
+      //self.nextPage='master';
+      document.querySelector("star-app").set('route.path', "/master");
       self._updateFB();
     })
     .catch(function(error) {
       self.message=error;
-      self.nextPage="error";
+      //self.nextPage="error";
+      document.querySelector("star-app").set('route.path', "/error");
     });
   }
   
@@ -192,6 +195,7 @@ class StarSignup extends GestureEventListeners(PolymerElement) {
       photoURL:     self.avatar
     }).then(function() {
       console.log('conforme FB');
+      console.info(user);
     }).catch(function(error) {
       console.log('Error: ' + error);
     });

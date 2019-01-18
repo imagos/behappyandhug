@@ -69,7 +69,7 @@ class StarApp extends PolymerElement {
         <app-drawer id="drawer" slot="drawer" swipe-open="[[narrow]]">
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
-            <a name=""   href="[[rootPath]]">   Inicio</a>
+            <a name=""        href="[[rootPath]]">        Inicio</a>
             <a name="about"   href="[[rootPath]]about">   About</a>
           </iron-selector>
         </app-drawer>
@@ -231,12 +231,15 @@ class StarApp extends PolymerElement {
           self.avatar   = self.user.avatar;
           self.area     = self.user.area;
           self.team     = self.user.team;
-          self.page='questions';
+          //self.page='questions';
+          document.querySelector("star-app").set('route.path', "/questions");
         } else {
-          self.page='signup';
+          //self.page='signup';
+          document.querySelector("star-app").set('route.path', "/signup");
         }
     }).catch(function(error) {
-        self.page='error';
+        //self.page='error';
+        document.querySelector("star-app").set('route.path', "/error");
         self.message=error;
     });
   }
@@ -254,10 +257,12 @@ class StarApp extends PolymerElement {
           self.user={};
           self.user.uid=result.user.uid;
           self.email=email;
-          self.page='success';
+          //self.page='success';
+          document.querySelector("star-app").set('route.path', "/success");
         })
         .catch(function(error) {
-          self.page='error';
+          //self.page='error';
+          document.querySelector("star-app").set('route.path', "/error");
           self.message=error;
         });
     }

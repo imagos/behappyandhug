@@ -57,7 +57,8 @@ class StarConfirm extends GestureEventListeners(PolymerElement) {
     })
     .catch(function(error) {
       self.message=error;
-      self.nextPage="error";
+      //self.nextPage="error";
+      document.querySelector("star-app").set('route.path', "/error");
       // Some error occurred, you can inspect the code: error.code
       // Common errors could be invalid email and invalid or expired OTPs.
     });
@@ -81,13 +82,15 @@ class StarConfirm extends GestureEventListeners(PolymerElement) {
             }
           });
           if(self.message!=""){
-            self.nextPage="error";
+            //self.nextPage="error";
+            document.querySelector("star-app").set('route.path', "/error");
             console.info(self.message);
           }
       })
       .catch(function(error) {  
           self.message=error;
-          self.nextPage="error";
+          //self.nextPage="error";
+          document.querySelector("star-app").set('route.path', "/error");
           console.log("Error getting Visit Report: ", error);
       });
   }
@@ -103,7 +106,8 @@ class StarConfirm extends GestureEventListeners(PolymerElement) {
     })
     .catch(function(error) {
       self.message=error;
-      self.nextPage="error";
+      //self.nextPage="error";
+      document.querySelector("star-app").set('route.path', "/error");
     });
   }
   

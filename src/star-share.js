@@ -135,11 +135,13 @@ class StarShare extends GestureEventListeners(PolymerElement) {
     })
     .then(function(docRef) {
         console.log("Document written with ID: ", docRef.id);
-        self.nextPage="wall";
+        //self.nextPage="wall";
+        document.querySelector("star-app").set('route.path', "/wall");
     })
     .catch(function(error) {
-        self.nextPage="error";
+        //self.nextPage="error";
         self.message=error;
+        document.querySelector("star-app").set('route.path', "/error");
         console.error("Error adding document: ", error);
     });
   }    

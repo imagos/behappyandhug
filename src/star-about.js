@@ -17,7 +17,7 @@ class StarAbout extends GestureEventListeners(PolymerElement) {
             background-repeat: no-repeat;
             background-position: center;
             background-image: url(../images/background.help.jpg);
-            background-color: #17325f;
+            background-color: #fff;
             text-align: center;
             color: #fff;
         }
@@ -59,7 +59,8 @@ class StarAbout extends GestureEventListeners(PolymerElement) {
     db.settings({timestampsInSnapshots: true});
   }
   _continue(){
-    this.nextPage='questions';
+    //this.nextPage='questions';
+    document.querySelector("star-app").set('route.path', "/questions");
   }
 }
 

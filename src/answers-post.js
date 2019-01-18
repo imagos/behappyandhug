@@ -25,8 +25,8 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
           text-align: left !important;
         }
         </style>
-        <div style="height: 40vh;" hidden=[[cancel]]>
-          <div style="overflow-y:auto;height:55vh;" id="chat">
+        <div style="height: 55vh;" hidden=[[cancel]]>
+          <div style="overflow-y:auto;height:40vh;" id="chat">
 
           </div>
           <div style="width:100%;margin:0px;padding:0px;">
@@ -35,7 +35,7 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
             </div>
             <div style="display:inline-block;width:20%;">
               <paper-icon-button icon="icons:send"    id="btnSendMessage" on-tap="sendMessage"  autofocus></paper-icon-button>
-              <paper-icon-button icon="icons:cancel"  id="btnClose"       on-tap="closeSection" autofocus></paper-icon-button>
+              <paper-icon-button icon="icons:cancel"  id="btnClose"       on-tap="closeSection" >         </paper-icon-button>
             </div>
           </div>
         </div>
@@ -85,16 +85,16 @@ class AnswersPost extends GestureEventListeners(PolymerElement) {
   closeSection(){
     this.cancel=true;
   }
-  
+   
   sendMessage(e){
     var self=this;
       if(self.$.txtMessage.value.length!=0){
         db.collection("postComments").add({
             postId:     self.postId,
             message:    self.$.txtMessage.value,
-            nickname:    self.nickname,
+            nickname:   self.nickname,
             userUid:    self.userUid,
-            team:     self.team,
+            team:       self.team,
             avatar:     self.avatar,
             registerDate: firebase.firestore.Timestamp.now()
         })

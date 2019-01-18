@@ -19,17 +19,12 @@ class StarWall extends PolymerElement {
   }
   static get properties() {
     return {
-      user:     { type: Object, notify: true },
-      avatar:   { type: String, notify: true },
-      nickname: { type: String, notify: true },
-      team:     { type: String, notify: true },
-      area:     { type: String, notify: true },
-      activeComments:{
-        type: Boolean,
-        notify: true,
-        value: false,
-        reflectToAttribute: true
-      },
+      user:           { type: Object,   notify: true },
+      avatar:         { type: String,   notify: true },
+      nickname:       { type: String,   notify: true },
+      team:           { type: String,   notify: true },
+      area:           { type: String,   notify: true },
+      activeComments: { type: Boolean,  notify: true, value: false, reflectToAttribute: true  },
     };
   }
   ready(){
@@ -47,13 +42,7 @@ class StarWall extends PolymerElement {
     elem.avatar   = this.avatar;
     elem.userUid  = this.user.uid;
     elem.team     = this.team;
-    elem.addEventListener('kick', function(e){
-      // logs the instance of event-targeting that hosts #myButton
-      console.info('target is:', e.target);
-      // logs [#myButton, ShadowRoot, event-retargeting,
-      //       body, html, document, Window]
-      console.info('composedPath is:', e.composedPath());
-    });
+    //elem.getAnswers();
     this.$.postWall.appendChild(elem);
   }
 
