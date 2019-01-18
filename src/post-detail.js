@@ -97,12 +97,13 @@ class PostDetail extends GestureEventListeners(PolymerElement) {
   }
   ready(){
     super.ready();
+    this.getAnswers();
   }
   getAnswers(){
     var self=this;
     self.$.numComments.innerHTML="0";
     self.numComments=0;
-    db.collection("postsComments").where("postId","==",self.post.id)
+    db.collection("postComments").where("postId","==",self.post.id)
       .get()
       .then(function(querySnapshot) {
           querySnapshot.forEach(function(doc) {

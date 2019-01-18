@@ -116,7 +116,7 @@ class StarLogin extends GestureEventListeners(PolymerElement) {
     //https://behappyandhug.firebaseapp.com/
     //http://behappy-elvisnizama.c9users.io:8081
     var actionCodeSettings = {
-      url: 'https://behappyandhug.firebaseapp.com/',
+      url: 'http://behappy-elvisnizama.c9users.io:8081',
       handleCodeInApp: true,
     };
     firebase.auth().sendSignInLinkToEmail(self.email, actionCodeSettings)

@@ -70,7 +70,7 @@ class StarApp extends PolymerElement {
           <app-toolbar>Menu</app-toolbar>
           <iron-selector selected="[[page]]" attr-for-selected="name" class="drawer-list" role="navigation">
             <a name=""        href="[[rootPath]]">        Inicio</a>
-            <a name="about"   href="[[rootPath]]about">   About</a>
+            <a name="about"   href="[[rootPath]]about">   Acerca de Star</a>
           </iron-selector>
         </app-drawer>
         <!-- Main content -->
@@ -136,7 +136,7 @@ class StarApp extends PolymerElement {
     }
     if (!page) {
       this._verifyUser();
-    } else if (['login', 'signup',  'validate','confirm', 'questions','about','error','success','share','wall'].indexOf(page) !== -1) {
+    } else if (['login', 'signup',  'validate', 'questions','about','error','success','share','wall'].indexOf(page) !== -1) {
       this.page = page;
     } else {
       this.page = 'about';
@@ -156,9 +156,6 @@ class StarApp extends PolymerElement {
         break;
       case 'validate':
         import('./star-validate.js');
-        break;
-      case 'confirm':
-        import('./star-confirm.js');
         break;
       case 'signup':
         import('./star-signup.js');

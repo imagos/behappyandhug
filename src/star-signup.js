@@ -117,6 +117,7 @@ class StarSignup extends GestureEventListeners(PolymerElement) {
     const firestore = firebase.firestore();
     const settings = {timestampsInSnapshots: true};
     firestore.settings(settings);
+    
     this._verify();
   }
   _verify(){
@@ -177,7 +178,7 @@ class StarSignup extends GestureEventListeners(PolymerElement) {
       self.avatar=self.user.avatar;
       console.info(self.user);
       //self.nextPage='master';
-      document.querySelector("star-app").set('route.path', "/master");
+      document.querySelector("star-app").set('route.path', "/questions");
       self._updateFB();
     })
     .catch(function(error) {

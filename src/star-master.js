@@ -36,7 +36,13 @@ class StarMaster extends PolymerElement {
     db.settings({timestampsInSnapshots: true});
     console.log(this.user);
     console.log('AREA: ' + this.area);
-    this._loadQuestions();
+    var user = firebase.auth().currentUser;
+    if (user != null) {
+      this._loadQuestions();
+    } else {
+      document.querySelector("star-app").set('route.path', "/login");
+    }
+    
   }
 
   _loadQuestions(){
